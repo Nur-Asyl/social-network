@@ -3,7 +3,7 @@ import { MongoClient, ObjectId } from 'mongodb';
 import bcrypt from 'bcrypt';
 
 async function generateUsers(client, db) {
-  const userCount = 1000;
+  const userCount = 10;
   const userIDs = Array.from({ length: userCount }, () => new ObjectId());
 
   const usersCollection = [];
@@ -67,14 +67,11 @@ async function generateConversations(client, db) {
       const friend = await db.collection('users').findOne({ _id: friendID });
 
       if (friend) {
-        const creatorID = faker.helpers.arrayElement([user._id, friend._id]);
-        const recipientID = creatorID.equals(user._id) ? friend._id : user._id;
 
         const numMessages = Math.floor(Math.random() * 10) + 1;
 
         const messages = Array.from({ length: numMessages }, () => ({
-          user_id: creatorID,
-          friend_id: recipientID,
+          user_id: faker.helpers.arrayElement([user._id, friend._id]),
           message: faker.lorem.sentence(),
           created_at: faker.date.past(),
           updated_at: faker.date.recent(),
@@ -82,7 +79,7 @@ async function generateConversations(client, db) {
 
         const conversationData = {
           _id: new ObjectId(),
-          friend_id: recipientID,
+          friend_id: friend._id,
           messages: messages,
         };
 
