@@ -3,7 +3,7 @@ import { MongoClient, ObjectId } from 'mongodb';
 import bcrypt from 'bcrypt';
 
 async function generateUsers(client, db) {
-  const userCount = 10;
+  const userCount = 1000;
   const userIDs = Array.from({ length: userCount }, () => new ObjectId());
 
   const usersCollection = [];
